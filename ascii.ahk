@@ -1,6 +1,6 @@
-﻿; ==== ascii ====
+; ==== ascii ====
 
-cat = 
+cat =
 (
     　　　　A____A
     　　　|・ㅅ・|
@@ -19,7 +19,7 @@ cat2 =
     (((^_(((/____(((_____/
 )
 
-dog = 
+dog =
 (
     　　　  　,　　/-__
     　　　((____/　°__>
@@ -51,7 +51,7 @@ horse =
 (
     　　　　　  ,----,
     　　_____/   /\|
-    　;(　)__,　)
+      ;(　)__,　)
       ;  //　　\-|
     　 \　　　|
     　  ^　　  ^
@@ -109,8 +109,8 @@ duck =
 sleepy_cat =
 (
           　　    ／＞　 フ
-        　| 　_　_| 
-        ／ ミ＿xノ 
+        　| 　_　_|
+        ／ ミ＿xノ
      ./　　　　  |
     ./　  ヽ　　ﾉ
     ||　　|　|　|
@@ -130,11 +130,11 @@ cat_in_bed =
 　　 ＼,ﾉ||                    ||
 )
 
-cat_with_message =
+cat_with_heart =
 (
      ∧,,,∧
  (  • · • )
-./    づ ♡ kys
+./    づ ♡
 )
 
 cat_on_a_cart =
@@ -149,7 +149,7 @@ cat_on_a_cart =
 
 cat_on_four_paws =
 (
-    　　　　　　　　__ __....._ _ 
+    　　　　　　　　__ __....._ _
                                 \ `)            `(/
                                 ./`               \
                                 |      d     b   |
@@ -159,88 +159,124 @@ cat_on_four_paws =
   (  \   / /   |                    |
     \ '-' /     >     /`""--.    /
       '---'    /     | |       |   \\
-               \__,,) )        \__,,))  
-
+               \__,,) )        \__,,))
 )
 
-; ==== macro ====
+puffin =
+(
+    　　　　.-"-.
+             /    ,~a\_
+             \    \___))>
+             ,)  ." 　\
+            /   (    　\
+           /    )   　   ;
+          /    /   　  /
+        ,/__."`  　_.-`
+       /__/`"  \\___
+)
+
+birds_on_wire =
+(
+　　　　　　　　　　  __,=--=,___
+    　　     . ---- .　　      /__| o \　　)
+    　　    /   　6_6　　      `-\   /  　/
+    　　    \_ 　 (__\　　        ,) 　　(,
+    　　    //  　 \\　　        //  　　\\
+    　　   ((   　  ))　　　    {(　　     )}
+=======""===""=========""===""=====
+    　　　      |||     　　　　        ||||
+    　　　       |      　　　　         ||
+)
+
+wolf_howling =
+(
+　　　　　　　  　　 .
+　　　　　　　 　　/ V\
+　　　　　　  　　/ ^    /
+　　　　　　      <<        |
+　　　　　      　/          |
+　　　　　　  /              |
+　　　　　  /                  |
+　　　　  /        \   \      /
+　　　　(           )     |   |
+   ________ |      _/_     |   |
+<__________\______)   \__)
+)
+    
+; ==== Main ====
+
+ascii_list := "
+(
+1- cat
+2- cat2
+3- dog
+4- fish
+5- moose
+6- horse
+7- buff_lobster
+8- cock
+9- duck
+10- sleepy_cat
+11- cat_in_bed
+12- cat_with_heart
+13- cat_on_a_cart
+14- cat_on_four_paws
+15- puffin
+16- birds_on_wire
+17- wolf_howling
+)"
+
+selected_ascii := []
+Loop, Parse, ascii_list, `n, `r
+{
+    ; Remove leading and trailing whitespace
+    line := Trim(A_LoopField)
+    if line = ""
+        continue
+
+    ; Split the line at the dash to get the key and value
+    StringSplit, parts, line, -
+    key := Trim(parts1)
+    value := Trim(parts2)
+
+    ; Assign the value to the associative array
+    selected_ascii[key] := %value%
+}
 
 ^6::
-
-    ascii_list := "
-    (
-    1- cat
-    2- cat 2
-    3- dog
-    4- fish
-    5- moose
-    6- horse
-    7- buff_lobster
-    8- cock
-    9- duck
-    10- sleepy cat
-    11- cat in bed
-    12- cat with message
-    13- cat on cart
-    14- cat on 4 paws
-    )"
-
-    InputBox, user_nbr,, % ascii_list,, 300, 400
-
-    If (ErrorLevel = 1)
     {
-        Return
-    }
+        InputBox, user_nbr,, % ascii_list,, 300, 400
 
-    switch user_nbr
-    {
-    case 1:
-        selected_ascii := cat
-    case 2:
-        selected_ascii := cat2
-    case 3:
-        selected_ascii := dog
-    case 4:
-        selected_ascii := fish
-    case 5:
-        selected_ascii := moose
-    case 6:
-        selected_ascii := horse
-    case 7:
-        selected_ascii := buff_lobster
-    case 8:
-        selected_ascii := cock
-    case 9:
-        selected_ascii := duck
-    case 10:
-        selected_ascii := sleepy_cat
-    case 11:
-        selected_ascii := cat_in_bed
-    case 12:
-        selected_ascii := cat_with_message
-    case 13:
-        selected_ascii := cat_on_a_cart
-    case 14:
-        selected_ascii := cat_on_four_paws
-    }
+        If (ErrorLevel = 1)
+        {
+            Return
+        }
 
-    WinActivate, Destiny 2
-    Sleep, 1
-    Send, {enter}
+        ; Get the selected ASCII art based on user number
+        selected_ascii_value := selected_ascii[user_nbr]
 
-    For Index, Value in StrSplit(selected_ascii, "`n")
-    {
-        Clipboard := Value
-        Send ^v
-        Sleep, 300
-        Send, {enter}
-        Send, e
+        WinActivate, Destiny 2
         Sleep, 1
         Send, {enter}
-        Sleep, 1
-    }
-    Send, {enter}
 
+        For Index, Value in StrSplit(selected_ascii_value, "`n")
+        {
+            Clipboard := Value
+            Send ^v
+            Sleep, 400
+            Send, {Enter Down}
+            Sleep, 10
+            Send, {Enter Up}
+            
+            Sleep, 5
+
+            Send, {Enter Down}
+            Sleep, 10
+            Send, {Enter Up}
+            Sleep, 1
+        }
+        Send, {enter}
+    }
 Return
 
 ^4::
